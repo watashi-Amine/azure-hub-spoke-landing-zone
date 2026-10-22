@@ -1,0 +1,26 @@
+# Terraform state and local data
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Provider and module caches
+.terraform/
+.terraform.tfstate.lock.info
+
+# Real environment values — only *.example files belong in git
+*.tfvars
+!*.tfvars.example
+
+# Editor and OS noise
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local planning notes: kept on disk for the working session, never published
+# with the template. ROADMAP.md describes the extraction from the private
+# source project and therefore contains organisation-specific identifiers.
+/ROADMAP.md
+/STATUS.md
