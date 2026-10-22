@@ -3,9 +3,6 @@
 A reusable Terraform template for an Azure hub-and-spoke network with a Palo
 Alto VM-Series HA firewall pair between the hub and one reference spoke.
 
-Everything environment-specific — organisation, datacenter codes, subscription
-IDs, address plan, DNS, credentials — has been removed. What remains is the
-architecture and the wiring.
 
 ## Project layout
 
@@ -85,10 +82,3 @@ These are enforced across every module in this repository:
 | `docs/` | planned |
 | `examples/` | planned |
 
-## Relationship to the original code
-
-This template was derived from a single-environment project repository. The
-architecture, the network logic and the firewall placement are unchanged. What
-changed is naming, defaults, structure, and the module interfaces — every module
-input was re-typed and every hidden default removed. `STATUS.md` records the
-mapping and the outstanding work.
