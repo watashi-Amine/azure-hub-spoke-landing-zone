@@ -28,8 +28,8 @@ resource "azurerm_network_interface" "this" {
   }
 }
 
-# Note: see azure-panos-ha for why azurerm_virtual_machine is retained rather
-# than migrated to azurerm_linux_virtual_machine in this release.
+# Note: see azure-panos-ha for why this module uses azurerm_virtual_machine
+# rather than azurerm_linux_virtual_machine.
 resource "azurerm_virtual_machine" "this" {
   count = var.enabled ? 1 : 0
 

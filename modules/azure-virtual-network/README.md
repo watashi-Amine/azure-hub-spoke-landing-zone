@@ -50,8 +50,8 @@ module "vnet" {
 
 ## Design notes
 
-- **Map keys are the subnet names.** There is no `snet-` prefix built inside the module: naming is a root-module concern, documented in `docs/naming.md`. This is the single biggest change from the module this replaces, which silently prepended `snet-` to every subnet.
-- **No `GatewaySubnet` special case.** Azure's naming exception was hardcoded here; with no VPN/ExpressRoute gateway in this template it is simply gone.
-- **`private_endpoint_network_policies` is a string**, matching Azure's native values (`Disabled`, `Enabled`, `NetworkSecurityGroupEnabled`, `RouteTableEnabled`). The older boolean `private_endpoint_network_policies_enabled` was **removed from the provider in azurerm 4.0** — do not "fix" this back to a boolean.
-- **No default DNS servers.** The original defaulted to environment-specific resolvers, which is exactly the kind of value that survives a copy-paste unnoticed.
+- **Map keys are the subnet names.** No `snet-` prefix is built inside the module: naming is a root-module concern, documented in `docs/naming.md`, so the subnet is called exactly what the caller wrote.
+- **No `GatewaySubnet` special case.** With no VPN/ExpressRoute gateway in this template there is nothing to reserve a name for; if you add a gateway, name that subnet yourself.
+- **`private_endpoint_network_policies` is a string**, matching Azure's native values (`Disabled`, `Enabled`, `NetworkSecurityGroupEnabled`, `RouteTableEnabled`). The boolean `private_endpoint_network_policies_enabled` was **removed from the provider in azurerm 4.0** — do not "fix" this back to a boolean.
+- **No default DNS servers.** A resolver address baked in as a default is exactly the kind of value that survives a copy-paste unnoticed and quietly sends traffic somewhere it should not go.
 - Outputs return ids and prefixes, not whole resource objects, so consumers stay decoupled from the resource schema.

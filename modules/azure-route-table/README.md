@@ -1,7 +1,9 @@
 # azure-route-table
 
-Creates route tables, binds them to subnets, and creates routes from data.
-Replaces both the hub and spoke route-table modules, which were ~90% identical.
+Creates route tables, binds them to subnets, and creates routes from data. One
+module covers both the hub and the spoke: they differ only in
+`bgp_route_propagation_enabled` and in the prefixes they route, both of which are
+inputs.
 
 ## Usage
 
@@ -45,8 +47,8 @@ module "rt" {
 
 ## Design notes
 
-- **Hub and spoke merged.** The two previous modules differed only by `bgp_route_propagation_enabled` and a name branch; both are now inputs. `bgp_route_propagation_enabled` defaults to `false` because a spoke must not learn routes around the firewall.
-- **`split("-")` key parsing is gone.** The old modules encoded `"<subnet>-<NextHopType>-<NextHopAddress>"` in a map key and split it at read time, which broke on hyphenated names — the bug noted in the old `resources-ne.tf`. Routes are typed objects now.
-- **`subnets_map_gw` renamed.** It never referred to the gateway subnet; it meant "destinations routed via the firewall". That concept is now just another entry in `routes`.
+- **One module for hub and spoke.** The only real difference between the two is `bgp_route_propagation_enabled`, which is an input. It defaults to `false` because a spoke must not learn routes around the firewall.
+- **Routes are typed objects.** No `"<subnet>-<NextHopType>-<NextHopAddress>"` string keys parsed with `split("-")` at read time, which breaks on any hyphenated name. `address_prefix`, `next_hop_type` and `next_hop_in_ip_address` are separate fields.
+- **The gateway subnet is not special-cased.** A route table bound to a gateway subnet is just another entry in `routes`.
 - **Validations added:** next-hop type enum, `next_hop_in_ip_address` required *only* for `VirtualAppliance`, valid CIDRs, no duplicate prefix within one table, and every route key must match a declared route table.
-- `molecule` and `gateway`/`rt_gw` special cases removed: they were project-specific branches inside a shared module.
+- **No caller-specific branches.** Nothing in the module knows about a particular project or environment.

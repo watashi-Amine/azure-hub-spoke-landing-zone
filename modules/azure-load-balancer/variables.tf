@@ -5,7 +5,7 @@ variable "name" {
 
 variable "location" {
   type        = string
-  description = "Azure region. No default: the previous \"West Europe\" default hid a wrong-region mistake."
+  description = "Azure region. No default, so the load balancer cannot land in a region nobody chose."
 }
 
 variable "resource_group_name" {
@@ -38,7 +38,7 @@ variable "sku_tier" {
 variable "zones" {
   type        = list(string)
   default     = ["1", "2", "3"]
-  description = "Availability zones for the frontend public IPs. The previous implementation hardcoded [1, 2, 3]."
+  description = "Availability zones for the frontend public IPs. Override for regions without three zones."
 }
 
 variable "frontend_public_ips" {

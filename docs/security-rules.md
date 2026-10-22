@@ -6,10 +6,10 @@ one `azurerm_network_security_rule` per entry.
 
 ## Why rules are data
 
-The original implementation hand-wrote roughly 130 security rule resources,
-about 2,300 lines, across four environments that were 91% identical. Configuring
-a new subnet meant finding and copying the right block; changing one policy meant
-changing it in four places and hoping nothing drifted.
+Writing security rules as one resource block per rule does not scale. A subnet
+with a dozen ports and four peers needs roughly that many blocks, and a policy
+change means editing every one of them in place. Four similar networks built
+that way are four files that look alike and drift apart.
 
 A nested map turns the same policy into a table that can be read in one screen
 and generated per role.

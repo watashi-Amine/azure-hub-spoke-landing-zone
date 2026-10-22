@@ -18,9 +18,3 @@ crash.*.log
 .idea/
 .vscode/
 *.swp
-
-# Local planning notes: kept on disk for the working session, never published
-# with the template. ROADMAP.md describes the extraction from the private
-# source project and therefore contains organisation-specific identifiers.
-/ROADMAP.md
-/STATUS.md

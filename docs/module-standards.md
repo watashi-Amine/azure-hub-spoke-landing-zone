@@ -102,11 +102,10 @@ from.
 
 ### 8. Every deviation is documented
 
-Each README has a **Design notes** section explaining why the module differs from
-an obvious implementation — for example why `private_endpoint_network_policies`
-is a string rather than a boolean, or why `azurerm_virtual_machine` is retained
-instead of `azurerm_linux_virtual_machine`. Without that, the next reader "fixes"
-it back.
+Each README has a **Design notes** section explaining why a module is shaped the
+way it is — for example why `private_endpoint_network_policies` is a string
+rather than a boolean, or why `azurerm_virtual_machine` is used instead of
+`azurerm_linux_virtual_machine`. Without that, the next reader "fixes" it back.
 
 ## Deprecations
 

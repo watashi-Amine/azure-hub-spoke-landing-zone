@@ -59,10 +59,9 @@ resource "azurerm_network_interface" "this" {
 }
 
 # Note: azurerm_virtual_machine is feature-frozen in the AzureRM provider but
-# still supported in 4.x. Migrating to azurerm_linux_virtual_machine is a
-# separate, deliberate change: it alters resource addresses, so it must not be
-# bundled into a template release without a state migration for anyone already
-# using the module.
+# still supported in 4.x. Moving to azurerm_linux_virtual_machine changes
+# resource addresses and therefore needs its own state migration, so it is
+# deliberately a separate change rather than part of this module.
 resource "azurerm_virtual_machine" "this" {
   for_each = var.firewalls
 

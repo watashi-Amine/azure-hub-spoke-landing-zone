@@ -3,10 +3,7 @@
 A reusable Terraform template for an Azure hub-and-spoke network with a Palo
 Alto VM-Series HA firewall pair between the hub and one reference spoke.
 
-
 ## Project layout
-
-Everything for this project lives under `azure-hub-spoke-landing-zone/`.
 
 ```
 README.md                     this file
@@ -67,8 +64,8 @@ These are enforced across every module in this repository:
    invent prefixes. The naming convention lives in one place.
 4. **Typed variables with validation.** No parallel positional lists; CIDRs,
    priorities, enums and offsets are validated at plan time.
-5. **Data over repetition.** Subnets, NSGs, rules and routes are maps, not
-   hundreds of near-identical resources.
+5. **Data over repetition.** Subnets, NSGs, rules and routes are maps, not one
+   resource block per entry.
 6. **`for_each` over maps**, never `count` (except genuine on/off toggles).
 7. **Outputs are data**, not whole resource objects.
 8. **Sensitive inputs marked `sensitive`.**
@@ -77,8 +74,7 @@ These are enforced across every module in this repository:
 
 | Layer | State |
 |---|---|
-| `modules/` (7) | **done** — refactored, anonymised, documented |
-| `infra/` (3 stacks) | planned — see `STATUS.md` |
-| `docs/` | planned |
-| `examples/` | planned |
-
+| `modules/` (7) | complete, documented |
+| `docs/` | complete |
+| `examples/` | complete |
+| `infra/` | reserved directories; `HOWTO.md` builds the same stacks step by step |

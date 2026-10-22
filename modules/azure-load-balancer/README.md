@@ -70,14 +70,18 @@ Key inputs; see `variables.tf` for the full typed list.
 
 ## Design notes
 
-- **Legacy splat removed.** The previous implementation read
-  `a.*.ip_name[0]` / `c.*.rule_name[0]`. Direct attribute access is used now:
-  same values, no list-wrapping, no index-`[0]` assumption.
-- **`vnet_resource_group_name` no longer defaults.** It previously defaulted to
-  an environment-specific resource group name, which is silently wrong for every
-  other consumer.
-- **`location` no longer defaults** to a hardcoded region.
-- **Zones are an input**, not a literal `[1, 2, 3]`.
-- **Tags have no org default.** The previous `{ billingTo = "IT" }` default is gone.
+- **Direct attribute access.** Rules and frontends are read as
+  `frontend.ip_name` and `rule.rule_name`, not through the splat form
+  `a.*.ip_name[0]`: same values, no list-wrapping, no assumption that an
+  attribute sits at index `[0]`.
+- **`vnet_resource_group_name` has no default.** A default here would be silently
+  wrong for anything outside one particular subscription, and the failure only
+  shows up as a 404 on the subnet at apply time.
+- **`location` has no default**, so the load balancer cannot land in a region
+  nobody chose.
+- **Zones are an input** (`["1","2","3"]` by default), not a literal compiled
+  into the resource, so a region without three zones can opt out.
+- **Tags have no built-in entry.** The map you pass is the map that is applied;
+  the module never merges a billing code of its own.
 - `allocated_outbound_ports` is derived from the frontend/backend counts, guarded
   against division by zero when no backend members are provided.
