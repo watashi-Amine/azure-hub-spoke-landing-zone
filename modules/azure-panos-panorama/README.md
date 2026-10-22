@@ -45,14 +45,14 @@ module "panorama" {
 
 ## Design notes
 
-- **Optional by default.** The replaced module always deployed Panorama, which
-  made it unusable for anyone without it.
-- **Address computed, not spliced.** The old module took a string prefix such as
-  `"10.1.50."` and concatenated `250`. Here the address is
-  `cidrhost(subnet_cidr, ip_offset)`, validated.
-- **The logging disk moved in.** The disk and its attachment used to live in the
-  root stack with org-specific tags; they belong with the VM.
-- **No hardcoded tags.** The previous module merged fixed
-  `BillingTo/Environment/Governance` values into every resource.
-- Same `azurerm_virtual_machine` note as `azure-panos-ha`: retained deliberately,
-  migration is a separate change.
+- **Optional by default.** `enabled = false` means the module creates nothing, so
+  a deployment without centralised management does not pay for Panorama.
+- **Address computed, not spliced.** The interface address is
+  `cidrhost(subnet_cidr, ip_offset)`, validated, so a prefix is never
+  concatenated with a host number by hand.
+- **The logging disk lives here.** The disk and its attachment belong with the VM
+  that uses them, not with the caller that happens to know the size.
+- **No built-in tags.** The module merges nothing into the tag map it is given.
+- Same `azurerm_virtual_machine` note as `azure-panos-ha`: the feature-frozen
+  resource is used deliberately, and moving to `azurerm_linux_virtual_machine` is
+  a separate change with its own state migration.

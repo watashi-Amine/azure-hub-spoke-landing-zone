@@ -44,8 +44,8 @@ variable "rules" {
     Security rules nested as { subnet key => { rule name => rule } }.
 
     Nesting rules under the subnet key removes the need to build composite
-    string keys, which is how the previous implementation lost hyphenated
-    subnet names when it split route/rule identifiers on "-".
+    string keys, which have to be split apart again on read and mangle any
+    name that already contains a hyphen.
 
     Rules are created as separate azurerm_network_security_rule resources
     (not inline), so they can be managed and reordered without touching the NSG.

@@ -1,10 +1,8 @@
 # azure-vnet-peering
 
 Creates a virtual network peering, in both directions by default, across two
-subscriptions.
-
-Rewritten from scratch: the module this replaces declared its own provider
-configurations and required an input it never used.
+subscriptions. Providers are passed in by the caller; the module declares none of
+its own.
 
 ## Usage
 
@@ -57,17 +55,15 @@ module "peering" {
 
 ## Design notes
 
-- **No provider blocks inside the module.** The replaced module declared
-  `provider "azurerm" { alias = "sub1" }` and `"sub2"` in its own `connection.tf`.
-  Declaring providers inside a child module is a deprecated pattern: it pins the
-  module to its own idea of subscriptions and prevents callers from composing it.
-  Providers are now passed in, which also means the module can later be driven
-  with `for_each` if Terraform ever supports that for provider-bound resources.
-- **Typed objects instead of parallel lists.** The old interface took seven
-  positional lists that had to stay the same length and order; nothing enforced
-  it. Two objects cannot get out of sync.
-- **`datacenter_name` removed.** It was required on all nine call sites and never
-  referenced in the module body.
+- **No provider blocks inside the module.** Declaring
+  `provider "azurerm" { alias = "sub1" }` and `"sub2"` inside a child module is a
+  deprecated pattern: it pins the module to its own idea of subscriptions and
+  prevents callers from composing it. Providers are passed in, which also means
+  the module can later be driven with `for_each` if Terraform ever supports that
+  for provider-bound resources.
+- **Typed objects instead of parallel lists.** Two objects (`local`, `remote`)
+  cannot get out of sync; positional lists of the same length and order can.
+- **No unused inputs.** Every variable is referenced in the module body.
 - **Gateway flags swap by direction.** `allow_gateway_transit` on one side pairs
   with `use_remote_gateways` on the other; the module applies that mapping so the
   asymmetry cannot be typed wrong.

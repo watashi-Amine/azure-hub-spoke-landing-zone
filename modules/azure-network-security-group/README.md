@@ -66,8 +66,14 @@ module "nsg" {
 
 ## Design notes
 
-- **Rules are nested per subnet**, `{ subnet => { rule name => rule } }`. The previous implementation required a flat map with composite string keys and later split those strings on `-`, which corrupted any hyphenated subnet or route name. Nesting removes string parsing entirely.
+- **Rules are nested per subnet**, `{ subnet => { rule name => rule } }`. A flat
+  map of composite keys forces the module to take the identifier apart again with
+  `split("-")`, which mangles any name that already contains a hyphen. Nesting
+  removes string parsing entirely.
 - **Rules are separate resources**, not inline `security_rule` blocks, so a single rule can be added or reordered without rewriting the NSG.
 - **Validations added:** priority range 100–4096, priority uniqueness per NSG, direction/access/protocol enums, and every rule key must correspond to a declared subnet.
-- **Removed:** `subscription_id` and `environment_name`, which were required inputs that the module never used.
-- The default `private` behaviour stays with `subnets_map`-free naming: association looks up the real subnet id passed in, rather than reconstructing a name with a `snet-` prefix.
+- **Only inputs that are used.** The module takes what it reads: no
+  `subscription_id` or `environment_name` parameter that never affects a
+  resource.
+- **Association uses the real subnet id** passed in by the caller, rather than
+  reconstructing a name with an `snet-` prefix and hoping it matches.

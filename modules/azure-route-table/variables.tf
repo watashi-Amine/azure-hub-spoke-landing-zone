@@ -43,9 +43,9 @@ variable "routes" {
   description = <<-EOT
     Routes nested as { route table key => { route name => route } }.
 
-    Typed objects replace the previous "Snet-NextHopType-NextHopAddress" string
-    keys, which were parsed with split("-") and therefore mis-split any route or
-    subnet name containing a hyphen.
+    Each route is a typed object. No "Snet-NextHopType-NextHopAddress" string
+    keys, which have to be parsed with split("-") and therefore mis-split any
+    name containing a hyphen.
 
     next_hop_type must be one of: VirtualNetworkGateway, VnetLocal, Internet,
     VirtualAppliance, None. next_hop_in_ip_address is required (and only valid)

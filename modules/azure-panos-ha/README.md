@@ -59,22 +59,21 @@ module "panos" {
 
 ## Design notes
 
-- **Interface order is an input, validated once.** The replaced module hardcoded
-  `[mgmt, outside, local, ha]` twice inside the VM resource, so the eth0…eth3
-  mapping could be broken by an unrelated edit. It is now `interface_order`,
-  checked against the interface keys.
+- **Interface order is an input, validated once.** `interface_order` is the single
+  source of truth for the eth0…eth3 mapping, checked against the interface keys,
+  so an unrelated edit cannot silently reorder the NICs.
 - **IP offsets belong to the interface.** No `cidrhost(cidr, 253)` literal
   anywhere; each interface states its own primary and secondary offset and both
   are validated against its CIDR.
-- **No org-specific names.** `hub_firewalls_rg`, `hub_pr_nic`, `hub_sc_nic` and
-  environment-coded device names are gone; names derive from the firewall and
-  interface keys you supply.
-- **Public IPs are opt-in per interface** (`public_ip = true`), instead of being
-  attached to a hardcoded `mgmt` key.
+- **Names derive from the keys you supply.** Firewall and interface keys produce
+  the VM, NIC, IP configuration and DNS label; no environment-coded device names
+  are baked in.
+- **Public IPs are opt-in per interface** (`public_ip = true`), rather than being
+  attached automatically to whichever interface is called `mgmt`.
 - **VM resource type.** `azurerm_virtual_machine` is feature-frozen in the
-  AzureRM provider but still supported in 4.x. It is kept here deliberately, so
-  that migrating to `azurerm_linux_virtual_machine` stays a separate change with
-  its own state migration, rather than being bundled into a template release.
+  AzureRM provider but still supported in 4.x. It is used here deliberately, so
+  that moving to `azurerm_linux_virtual_machine` stays a separate change with its
+  own state migration rather than being bundled into a template release.
 - **Load balancers are not in this module.** Ingress/egress LBs are composed in
   the root stack from `azure-load-balancer`, so their rules are visible where
   they are decided.

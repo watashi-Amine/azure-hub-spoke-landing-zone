@@ -1,8 +1,8 @@
 locals {
   frontends = merge(var.frontend_public_ips, var.frontend_private_ips)
 
-  # Direct attribute access (a.ip_name) instead of the legacy splat (a.*.ip_name[0])
-  # used by the previous implementation. Same result, readable and type-safe.
+  # Direct attribute access (frontend.ip_name) rather than the splat form
+  # (a.*.ip_name[0]): same values, readable and type-safe.
   rules_list = flatten([
     for frontend_key, frontend in local.frontends : [
       for rule_key, rule in frontend.rules : {

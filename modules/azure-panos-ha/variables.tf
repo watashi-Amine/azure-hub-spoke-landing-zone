@@ -79,9 +79,8 @@ variable "interface_order" {
   description = <<-EOT
     NIC attachment order, which PAN-OS uses to map eth0, eth1, eth2, ...
 
-    The previous implementation hardcoded this order twice, inside the VM
-    resource, so the mapping was easy to break silently. Here it is one input,
-    validated against the interface keys, and it is the single source of truth.
+    One input, validated against the interface keys, so the mapping is the
+    single source of truth and cannot be reordered by an unrelated edit.
   EOT
 
   validation {

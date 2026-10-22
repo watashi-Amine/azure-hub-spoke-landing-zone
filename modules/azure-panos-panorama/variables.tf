@@ -4,7 +4,6 @@ variable "enabled" {
   description = <<-EOT
     Deploy Panorama. Defaults to false so the template is usable without
     Panorama; set to true when centralised management is required.
-    The previous module always deployed it.
   EOT
 }
 
@@ -31,7 +30,7 @@ variable "subnet_id" {
 
 variable "subnet_cidr" {
   type        = string
-  description = "CIDR of the management subnet. Combined with ip_offset to compute the interface address, rather than string-splicing an address prefix."
+  description = "CIDR of the management subnet, combined with ip_offset to compute the interface address."
 
   validation {
     condition     = can(cidrhost(var.subnet_cidr, 0))
@@ -75,7 +74,7 @@ variable "image" {
 variable "data_disk_size_gb" {
   type        = number
   default     = 2048
-  description = "Size of the Panorama logging data disk. The disk and its attachment are created here, not in the root module."
+  description = "Size of the Panorama logging data disk, which this module creates and attaches."
 }
 
 variable "admin_username" {
